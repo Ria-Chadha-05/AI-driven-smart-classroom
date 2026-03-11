@@ -1,262 +1,299 @@
-AI-Driven Smart Classroom Scheduler
+<div align="center">
 
-A full-stack intelligent scheduling system that automates university timetable creation using AI.
-This application helps academic institutions manage courses, faculty, classrooms, and timetables while minimizing conflicts and improving resource utilization.
+# 🎓 AI-Driven Smart Classroom Timetable Generator
 
-The system provides a modern web dashboard where administrators can manage academic resources and generate optimized timetables using an AI model.
+**An intelligent full-stack web application that automates university timetable creation using AI.**
 
-⸻
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/React-18+-61DAFB?style=flat-square&logo=react&logoColor=black)](https://reactjs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Express](https://img.shields.io/badge/Express.js-4+-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3+-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-📌 Project Overview
+[Features](#-features) · [Tech Stack](#-tech-stack) · [Getting Started](#-getting-started) · [How It Works](#-how-the-ai-works) · [Architecture](#-architecture) · [Roadmap](#-roadmap)
 
-Creating university timetables manually is time-consuming and prone to errors such as:
-	•	Faculty scheduling conflicts
-	•	Room allocation conflicts
-	•	Uneven distribution of classes
-	•	Poor utilization of resources
+</div>
 
-The AI-Driven Smart Classroom Scheduler solves these problems by combining:
-	•	A React dashboard
-	•	A Node.js backend API
-	•	MongoDB database
-	•	AI-based timetable generation
+---
 
-The AI analyzes available courses, faculty, rooms, and time slots and generates a conflict-free weekly timetable.
+## 📌 Overview
 
-⸻
+Creating university timetables manually is a time-consuming and error-prone process. Administrators must juggle dozens of constraints — faculty availability, room capacities, course requirements, and break periods — often resulting in conflicts, poor resource utilization, and significant administrative overhead.
 
-✨ Key Features
+**The AI-Driven Smart Classroom Timetable Generator** eliminates these challenges by combining a modern full-stack web application with an AI model to automatically produce **conflict-free, optimized weekly timetables** in seconds.
 
-Dashboard Analytics
-	•	Displays total courses, faculty, rooms, and timetable statistics
-	•	Real-time data from MongoDB
+Administrators can manage all academic data through an intuitive dashboard, click a single button, and receive a complete, validated schedule — ready to use.
 
-Course Management
-	•	Add / edit / delete courses
-	•	Configure credits, department, semester, prerequisites
+---
 
-Faculty Management
-	•	Manage instructors and their specialization
-	•	Set availability and maximum hours per week
+## ✨ Features
 
-Room Management
-	•	Manage classrooms and labs
-	•	Configure room capacity and equipment
+### 🤖 AI-Powered Timetable Generation
+- Automatically generates complete weekly timetables using a large language model (Google Gemini / Groq / OpenAI)
+- Matches courses to faculty based on **specialization**
+- Ensures **zero conflicts** for faculty, rooms, and time slots
+- Respects break periods and institutional constraints
 
-AI Timetable Generator
-	•	Automatically generates schedules using AI
-	•	Prevents conflicts between faculty, rooms, and courses
-	•	Saves generated timetable to the database
+### 📊 Admin Dashboard
+- Live statistics: total courses, faculty, rooms, and timetable entries
+- Clean, real-time data visualization powered by MongoDB
 
-Notifications System
-	•	Alerts when timetable generation succeeds or fails
-	•	Tracks system events
+### 📚 Course Management
+- Add, edit, and delete courses
+- Configure credits, department, semester, weekly hours, and course type (lecture / lab / seminar)
 
-⸻
+### 👨‍🏫 Faculty Management
+- Manage instructors with their specializations
+- Set maximum weekly hours and course assignments
 
-🛠 Technology Stack
+### 🏫 Room Management
+- Track classrooms and labs
+- Configure capacity, type, and available equipment
 
-Frontend
-	•	React
-	•	Vite
-	•	Tailwind CSS
-	•	Axios
-	•	Lucide Icons
-	•	ShadCN UI Components
+### 🔔 Notifications System
+- Real-time alerts for timetable generation success or failure
+- System event tracking and data validation warnings
 
-Backend
-	•	Node.js
-	•	Express.js
-	•	MongoDB
-	•	Mongoose
+---
 
-AI Integration
-	•	Google Gemini API (configurable — can be replaced with OpenAI / Groq / other LLM APIs)
+## 🛠 Tech Stack
 
-Database
-	•	MongoDB Atlas
+| Layer | Technology |
+|---|---|
+| **Frontend** | React 18, Vite, Tailwind CSS, Axios, ShadCN UI, Lucide Icons |
+| **Backend** | Node.js, Express.js |
+| **Database** | MongoDB Atlas, Mongoose ODM |
+| **AI Integration** | Google Gemini API *(swappable with OpenAI / Groq / OpenRouter)* |
+| **Dev Tools** | Git, GitHub, npm, Concurrently |
 
-Development Tools
-	•	Git
-	•	GitHub
-	•	npm
-	•	Concurrently (for running frontend + backend together)
+---
 
-⸻
+## 🏗 Architecture
 
-🏗 Project Architecture
+The project follows a clean **three-layer full-stack architecture**:
 
-AI-driven-smart-classroom-main
+```
+AI-driven-smart-classroom/
+│
+├── backend/
+│   ├── controllers/
+│   │   └── timetableGenerator.js   # AI integration & generation logic
+│   ├── models/                     # Mongoose schemas
+│   ├── routes/                     # Express API routes
+│   ├── utils/                      # Helper functions
+│   ├── server.js                   # Entry point
+│   └── .env                        # Environment variables (not committed)
+│
+├── frontend/
+│   └── src/
+│       ├── components/             # Reusable UI components
+│       ├── pages/                  # Dashboard, Courses, Faculty, Rooms
+│       ├── App.jsx
+│       └── main.jsx
+│
+└── package.json                    # Root scripts (runs both frontend + backend)
+```
 
-backend
-├── models
-├── routes
-├── utils
-├── controllers
-├── server.js
-└── .env
+**Data Flow:**
+```
+React Frontend  ←→  Express REST API  ←→  MongoDB
+                          ↕
+                        Groq AI
+```
 
-frontend
-├── src
-│   ├── components
-│   ├── pages
-│   ├── App.jsx
-│   └── main.jsx
-└── vite.config.js
+---
 
-package.json
+## 🤖 How the AI Works
 
-⸻
+The timetable generation follows a structured pipeline:
 
-🤖 How the AI Timetable Generation Works
-	1.	The backend retrieves:
-	•	Courses
-	•	Faculty
-	•	Rooms
-	2.	A structured prompt is created containing:
-	•	department
-	•	semester
-	•	available days
-	•	time slots
-	•	faculty specializations
-	3.	The AI model generates a JSON schedule.
-	4.	The schedule is validated and enriched with:
-	•	course names
-	•	faculty names
-	•	room names
-	5.	The final timetable is stored in MongoDB.
+```
+1. Backend fetches all Courses, Faculty, and Rooms from MongoDB
+        ↓
+2. A detailed prompt is constructed containing:
+   - Department & semester info
+   - Available days & time slots
+   - Mandatory break periods
+   - Faculty specializations
+   - Room capacities & types
+        ↓
+3. Prompt is sent to the AI model (Gemini / Groq / OpenAI)
+        ↓
+4. AI returns a structured JSON schedule
+        ↓
+5. Backend validates the output and enriches it with
+   course names, faculty names, and room names
+        ↓
+6. Final timetable is saved to MongoDB and displayed on the dashboard
+```
 
-⸻
+### Constraint Rules Enforced by AI
 
-⚙ Installation Guide
+| Constraint | Description |
+|---|---|
+| Faculty Specialization | Faculty only assigned to courses matching their expertise |
+| No Double-Booking | Faculty cannot teach two classes simultaneously |
+| Room Availability | Rooms cannot host more than one class at a time |
+| Weekly Session Requirements | Each course receives its required weekly sessions |
+| Time Slot Restrictions | Classes scheduled only within predefined time slots |
+| Break Periods | No classes scheduled during mandatory break hours |
 
-1️⃣ Clone the repository
+---
 
+## 🚀 Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) v18 or higher
+- [npm](https://www.npmjs.com/) v8 or higher
+- A [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) account
+- An AI API key (Google Gemini, Groq, or OpenAI)
+
+---
+
+### 1. Clone the Repository
+
+```bash
 git clone https://github.com/yourusername/AI-driven-smart-classroom.git
 cd AI-driven-smart-classroom
+```
 
-⸻
+---
 
-2️⃣ Install dependencies
+### 2. Install Dependencies
 
-Install root dependencies:
-
+```bash
+# Install root dependencies
 npm install
 
-Install backend dependencies:
+# Install backend dependencies
+cd backend && npm install
 
-cd backend
-npm install
+# Install frontend dependencies
+cd ../frontend && npm install
+```
 
-Install frontend dependencies:
+---
 
-cd ../frontend
-npm install
+### 3. Configure Environment Variables
 
-⸻
+Inside the `backend/` folder, create a `.env` file:
 
-3️⃣ Create Environment File
-
-Inside the backend folder, create a file named:
-
-.env
+```bash
+touch backend/.env
+```
 
 Add the following variables:
 
+```env
 PORT=5001
 MONGO_URI=your_mongodb_connection_string
 GOOGLE_API_KEY=your_ai_api_key
+```
 
-Example:
+**Example:**
 
+```env
 PORT=5001
 MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/smartclassroom
 GOOGLE_API_KEY=your_gemini_api_key
+```
 
-⸻
+---
 
-4️⃣ Run the Application
+### 4. Set Up the Database
 
-Go back to the project root folder:
+In your [MongoDB Atlas](https://cloud.mongodb.com/) cluster, ensure the following collections exist:
 
-cd ..
-
-Run both frontend and backend together:
-
-npm run dev
-
-The app will start on:
-
-Frontend
-http://localhost:5173
-
-Backend API
-http://localhost:5001
-
-⸻
-
-🗄 Database Setup
-
-Create a MongoDB Atlas cluster and ensure your database contains these collections:
-
+```
 courses
 faculties
 rooms
 timetables
 notifications
+```
 
-You can insert data manually using MongoDB Atlas or through the application UI.
+You can create and populate these collections through the application UI or manually via MongoDB Atlas.
 
-⸻
+---
 
-🔄 Changing the AI Provider
+### 5. Run the Application
 
-If you want to replace the Gemini API with another AI provider (such as OpenAI or Groq), update the AI logic in:
+From the **project root directory:**
 
-backend/controllers/timetableGenerator.js
+```bash
+npm run dev
+```
 
-Replace the AI request logic with your preferred API.
+This starts both the frontend and backend concurrently.
 
-Example providers supported easily:
-	•	OpenAI
-	•	Groq
-	•	HuggingFace
-	•	OpenRouter
+| Service | URL |
+|---|---|
+| Frontend | http://localhost:5173 |
+| Backend API | http://localhost:5001 |
 
-⸻
+---
 
-🔒 Security Note
+## 📋 Example Workflow
 
-The .env file is not included in the repository to protect sensitive credentials.
+```
+1. Add your Courses        →  Navigate to the Courses page and fill in course details
+2. Add Faculty Members     →  Add instructors with their specializations
+3. Add Rooms               →  Register classrooms and labs with their capacities
+4. Generate Timetable      →  Click "Generate Timetable" on the dashboard
+5. Review Schedule         →  AI produces a conflict-free timetable instantly
+6. Done!                   →  Timetable is saved to the database and ready to use
+```
 
-Never commit:
+---
 
-.env
-API keys
-database passwords
+## 🔮 Roadmap
 
-Ensure .env is listed in .gitignore.
+- [ ] Multi-department scheduling support
+- [ ] Faculty preference weighting
+- [ ] Drag-and-drop timetable editor
+- [ ] Export timetable as PDF
+- [ ] Admin authentication system
+- [ ] Student course enrollment integration
+- [ ] Real-time conflict detection and resolution
+- [ ] Mobile application support
+- [ ] Custom ML model trained on historical timetable data
 
-⸻
+---
 
-🚀 Example Workflow
-	1.	Add courses in the Courses page
-	2.	Add faculty and their specialization
-	3.	Add rooms and facilities
-	4.	Click Generate Timetable
-	5.	AI produces a conflict-free schedule
-	6.	Timetable is saved and displayed
+## 🔒 Security Notes
 
-⸻
+- The `.env` file is **not included** in this repository to protect sensitive credentials.
+- **Never commit** API keys, database passwords, or any secrets to version control.
+- Ensure your `.gitignore` includes:
+  ```
+  .env
+  node_modules/
+  ```
 
-🔮 Future Improvements
-	•	Multi-department scheduling
-	•	Advanced constraint optimization
-	•	Faculty preference weighting
-	•	Drag-and-drop timetable editor
-	•	Export timetable as PDF
-	•	Authentication system for administrators
+---
 
-⸻
+## 🤝 Contributing
 
+Contributions are welcome! To get started:
 
+1. Fork the repository
+2. Create a new branch: `git checkout -b feature/your-feature-name`
+3. Commit your changes: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin feature/your-feature-name`
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+<div align="center">
+
+**Built with ❤️ using React, Node.js, MongoDB & AI**
+
+</div>
