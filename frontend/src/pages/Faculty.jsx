@@ -28,7 +28,7 @@ export default function FacultyPage() {
   const fetchFaculty = async () => {
     setLoading(true)
     try {
-      const res = await axios.get("http://localhost:5000/api/faculty")
+      const res = await axios.get("http://localhost:5001/api/faculty")
       setFaculty(Array.isArray(res.data) ? res.data : [])
     } catch (error) {
       console.error(error)
@@ -46,9 +46,9 @@ export default function FacultyPage() {
     setFormLoading(true)
     try {
       if (editingFaculty) {
-        await axios.put(`http://localhost:5000/api/faculty/${editingFaculty._id}`, data)
+        await axios.put(`http://localhost:5001/api/faculty/${editingFaculty._id}`, data)
       } else {
-        await axios.post("http://localhost:5000/api/faculty", data)
+        await axios.post("http://localhost:5001/api/faculty", data)
       }
       setShowForm(false)
       setEditingFaculty(null)
@@ -62,7 +62,7 @@ export default function FacultyPage() {
 
   const handleDelete = async (facultyMember) => {
     try {
-      await axios.delete(`http://localhost:5000/api/faculty/${facultyMember._id}`)
+      await axios.delete(`http://localhost:5001/api/faculty/${facultyMember._id}`)
       if (editingFaculty && editingFaculty._id === facultyMember._id) {
         setEditingFaculty(null)
         setShowForm(false)

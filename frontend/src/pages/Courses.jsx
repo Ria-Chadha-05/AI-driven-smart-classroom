@@ -38,7 +38,7 @@ export default function CoursesPage() {
   const fetchCourses = async () => {
     try {
       setLoading(true)
-      const res = await axios.get("http://localhost:5000/api/courses/")
+      const res = await axios.get("http://localhost:5001/api/courses/")
       setCourses(res.data)
     } catch (err) {
       console.error("Failed to fetch courses:", err)
@@ -54,7 +54,7 @@ export default function CoursesPage() {
   const handleCreateCourse = async (courseData) => {
     try {
       setFormLoading(true)
-      await axios.post("http://localhost:5000/api/courses/", courseData)
+      await axios.post("http://localhost:5001/api/courses/", courseData)
       setShowForm(false)
       setEditingCourse(null)
       fetchCourses()
@@ -68,7 +68,7 @@ export default function CoursesPage() {
   const handleUpdateCourse = async (id, courseData) => {
     try {
       setFormLoading(true)
-      await axios.put(`http://localhost:5000/api/courses/${id}`, courseData)
+      await axios.put(`http://localhost:5001/api/courses/${id}`, courseData)
       setEditingCourse(null)
       setShowForm(false)
       fetchCourses()
@@ -81,7 +81,7 @@ export default function CoursesPage() {
 
   const handleDeleteCourse = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/courses/${id}`)
+      await axios.delete(`http://localhost:5001/api/courses/${id}`)
       if (editingCourse && editingCourse._id === id) {
         setEditingCourse(null)
         setShowForm(false)

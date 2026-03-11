@@ -48,18 +48,18 @@ export default function Dashboard() {
     const fetchData = async () => {
       try {
         const [coursesRes, facultyRes, roomsRes, timetablesRes, notificationsRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/courses"),
-          axios.get("http://localhost:5000/api/faculty"),
-          axios.get("http://localhost:5000/api/rooms"),
-          axios.get("http://localhost:5000/api/timetables"),
-          axios.get("http://localhost:5000/api/notifications"),
+          axios.get("http://localhost:5001/api/courses"),
+          axios.get("http://localhost:5001/api/faculty"),
+          axios.get("http://localhost:5001/api/rooms"),
+          axios.get("http://localhost:5001/api/timetables"),
+          axios.get("http://localhost:5001/api/notifications"),
         ])
 
-        setCourses(coursesRes.data)
-        setFaculty(facultyRes.data)
-        setRooms(roomsRes.data)
-        setTimetables(timetablesRes.data)
-        setNotifications(notificationsRes.data)
+        setCourses(Array.isArray(coursesRes.data) ? coursesRes.data : [])
+        setFaculty(Array.isArray(facultyRes.data) ? facultyRes.data : [])
+        setRooms(Array.isArray(roomsRes.data) ? roomsRes.data : [])
+        setTimetables(Array.isArray(timetablesRes.data) ? timetablesRes.data : [])
+        setNotifications(Array.isArray(notificationsRes.data) ? notificationsRes.data : [])
         setLoading(false)
       } catch (err) {
         console.error("Failed to fetch data:", err)

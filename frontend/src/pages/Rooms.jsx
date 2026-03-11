@@ -85,7 +85,7 @@ export default function RoomPage() {
   const fetchRooms = async () => {
     setLoading(true)
     try {
-      const res = await axios.get("http://localhost:5000/api/rooms")
+      const res = await axios.get("http://localhost:5001/api/rooms")
       setRooms(res.data)
     } catch (error) {
       console.error("Error fetching rooms:", error)
@@ -133,9 +133,9 @@ export default function RoomPage() {
           : [],
       }
       if (editingRoom) {
-        await axios.put(`http://localhost:5000/api/rooms/${editingRoom._id}`, payload)
+        await axios.put(`http://localhost:5001/api/rooms/${editingRoom._id}`, payload)
       } else {
-        await axios.post("http://localhost:5000/api/rooms", payload)
+        await axios.post("http://localhost:5001/api/rooms", payload)
       }
       resetForm()
       setShowForm(false)
@@ -150,7 +150,7 @@ export default function RoomPage() {
   const handleDeleteRoom = async (id) => {
     if (!confirm("Are you sure you want to delete this room?")) return
     try {
-      await axios.delete(`http://localhost:5000/api/rooms/${id}`)
+      await axios.delete(`http://localhost:5001/api/rooms/${id}`)
       fetchRooms()
     } catch (error) {
       console.error("Error deleting room:", error)

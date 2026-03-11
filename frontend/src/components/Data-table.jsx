@@ -5,14 +5,14 @@ import { Button } from "@/components/ui/button"
 import { Search, Filter, MoreHorizontal } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
-export function DataTable({ data, columns, searchKey, loading = false, onEdit, onDelete, onView }) {
+export function DataTable({ data = [], columns = [], searchKey, loading = false, onEdit, onDelete, onView }) {
   const [searchTerm, setSearchTerm] = useState("")
   const [sortColumn, setSortColumn] = useState(null)
   const [sortDirection, setSortDirection] = useState("asc")
 
-  const filteredData = data.filter((item) => {
+  const filteredData = (data || []).filter((item) => {
     if (!searchTerm || !searchKey) return true
-    const value = item[searchKey]
+    const value = item?.[searchKey] ?? ""
     return String(value).toLowerCase().includes(searchTerm.toLowerCase())
   })
 
@@ -24,7 +24,7 @@ export function DataTable({ data, columns, searchKey, loading = false, onEdit, o
     }
   }
 
-  const sortedData = [...filteredData].sort((a, b) => {
+  const sortedData = [...(filteredData || [])].sort((a, b) => {
     if (!sortColumn) return 0
     const aValue = String(a[sortColumn] || "")
     const bValue = String(b[sortColumn] || "")
@@ -106,7 +106,7 @@ export function DataTable({ data, columns, searchKey, loading = false, onEdit, o
                 </TableCell>
               </TableRow>
             ) : (
-              sortedData.map((item) => (
+              (sortedData || []).map((item) => (
                 <TableRow
                   key={item._id}
                   className="border-b border-slate-100 hover:bg-slate-50/80 transition-all group"

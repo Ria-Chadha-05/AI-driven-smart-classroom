@@ -139,10 +139,9 @@ export async function generateTimetableWithAI(request) {
     // 3. Call the Gemini API with the corrected model name
     console.log('Sending request to Gemini AI...');
     
-    // ===== FIXED CODE =====
     const result = await genAI.models.generateContent({
-      model: 'gemini-2.0-flash',
-      contents: prompt
+    model: 'gemini-2.0-flash-exp',
+    contents: prompt
     });
     
     // Extract the text from the response correctly
