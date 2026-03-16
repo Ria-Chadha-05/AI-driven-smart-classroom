@@ -64,7 +64,7 @@ Administrators can manage all academic data through an intuitive dashboard, clic
 | **Backend** | Node.js, Express.js |
 | **Database** | MongoDB Atlas, Mongoose ODM |
 | **AI Integration** | Groq |
-| **Dev Tools** | Git, GitHub, Concurrently |
+| **Dev Tools** | Git, GitHub |
 
 ---
 
