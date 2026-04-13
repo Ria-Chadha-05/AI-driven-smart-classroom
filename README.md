@@ -249,3 +249,55 @@ Updated Version :
 
 [![Watch the demo](https://img.youtube.com/vi/rEgMRZicTes/0.jpg)](https://youtu.be/rEgMRZicTes)
 
+
+⸻
+
+## 🚀 My Contributions
+
+I played a **primary role in developing the AI-Driven Smart Classroom Timetable Generator**, contributing across both backend and frontend to build a complete, functional system from the ground up.
+
+### 🧠 Backend Development
+- Designed and implemented the **core system architecture**
+- Developed backend logic for:
+  - Data processing and scheduling workflows  
+  - API creation and integration  
+- Structured and managed key data entities:
+  - Courses  
+  - Faculty  
+  - Rooms  
+  - Scheduling constraints  
+- Ensured **efficient communication** between server and client
+
+### 🎨 Frontend Development
+- Built the **initial UI and application structure** using React + Tailwind CSS  
+- Developed core modules:
+  - Course management dashboard  
+  - Faculty allocation system  
+  - Room assignment interface  
+  - Timetable visualization  
+- Integrated backend APIs with frontend using proper state management  
+- Ensured **real-time data reflection** in UI  
+
+### ⚙️ Features & Functionality
+- Implemented:
+  - Real-time updates  
+  - Notifications system  
+  - Interactive UI components  
+- Translated **complex scheduling logic into a user-friendly interface**
+
+### 🛠️ Optimization & Debugging
+- Performed debugging and issue resolution  
+- Improved **performance and system efficiency**  
+- Ensured smooth **end-to-end functionality**
+
+### 👥 Team Contribution Context
+- I majorly built the **core system, backend, and major functionalities**
+- Later updates by my team members focused on:
+  - UI refinements  
+  - Visual enhancements  
+
+### ⭐ Overall Impact
+I was responsible for **building the complete working system**, ensuring:
+- Strong backend architecture  
+- Seamless frontend integration  
+- Practical usability for academic environments  
