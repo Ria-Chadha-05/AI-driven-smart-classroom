@@ -217,7 +217,7 @@ You can insert data manually using MongoDB Atlas or through the application UI.
 
 ⸻
 
-🔒 Security Note
+## 🔒 Security Note
 
 The .env file is not included in the repository to protect sensitive credentials.
 
@@ -231,17 +231,7 @@ Ensure .env is listed in .gitignore.
 
 ⸻
 
-🚀 Example Workflow
-	1.	Add courses in the Courses page
-	2.	Add faculty and their specialization
-	3.	Add rooms and facilities
-	4.	Click Generate Timetable
-	5.	AI produces a conflict-free schedule
-	6.	Timetable is saved and displayed
-
-⸻
-
-🔮 Future Improvements
+## 🔮 Future Improvements
 	•	Multi-department scheduling
 	•	Advanced constraint optimization
 	•	Faculty preference weighting
@@ -251,9 +241,11 @@ Ensure .env is listed in .gitignore.
 
 ⸻
 
-🚀 Demo 
+## 🚀 Demo 
 
+[![Watch the demo](https://img.youtube.com/vi/NWQvumEzjg4/0.jpg)](https://youtu.be/NWQvumEzjg4)
 
+Updated Version : 
 
-https://github.com/user-attachments/assets/98624e58-1e6b-4252-a47b-6134bb673773
+[![Watch the demo](https://img.youtube.com/vi/rEgMRZicTes/0.jpg)](https://youtu.be/rEgMRZicTes)
 
