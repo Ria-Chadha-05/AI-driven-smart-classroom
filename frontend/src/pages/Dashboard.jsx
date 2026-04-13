@@ -18,6 +18,8 @@ import {
   Bell,
   LayoutDashboard,
   MessageSquare,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react"
 import { Link } from "react-router-dom"
 import { Chatbot } from "@/components/Chatbot"
@@ -30,10 +32,8 @@ export default function Dashboard() {
   const [timetables, setTimetables] = useState([])
   const [notifications, setNotifications] = useState([])
   const [activeNavItem, setActiveNavItem] = useState("dashboard")
-
-  // --- State for Chatbot ---
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
-  // -------------------------
 
   const navigationItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, path: "/" },
@@ -54,7 +54,6 @@ export default function Dashboard() {
           axios.get("http://localhost:5001/api/timetables"),
           axios.get("http://localhost:5001/api/notifications"),
         ])
-
         setCourses(Array.isArray(coursesRes.data) ? coursesRes.data : [])
         setFaculty(Array.isArray(facultyRes.data) ? facultyRes.data : [])
         setRooms(Array.isArray(roomsRes.data) ? roomsRes.data : [])
@@ -66,36 +65,29 @@ export default function Dashboard() {
         setLoading(false)
       }
     }
-
     fetchData()
   }, [])
 
-  // --- Loading State with enhanced animations ---
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-slate-50 relative overflow-hidden">
-        {/* Sidebar Loading */}
-        <div className="w-64 bg-slate-900 border-r border-slate-800 shadow-sm relative z-10">
-          <div className="p-6 space-y-6">
-            <div className="h-8 bg-slate-800 animate-pulse rounded w-32" />
-            <div className="space-y-3">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-10 bg-slate-800 animate-pulse rounded" />
-              ))}
-            </div>
+      <div className="flex min-h-screen" style={{ background: "#f7f3f0" }}>
+        <div
+          className="w-60 flex-shrink-0"
+          style={{ background: "#3d2c2c" }}
+        >
+          <div className="p-6 space-y-4">
+            <div className="h-8 rounded animate-pulse" style={{ background: "#5a3d3d" }} />
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="h-10 rounded animate-pulse" style={{ background: "#5a3d3d" }} />
+            ))}
           </div>
         </div>
-
-        {/* Main Content Loading */}
-        <div className="flex-1 p-8 relative z-10 bg-slate-50">
-          <div className="max-w-7xl mx-auto space-y-8">
-            <div className="h-12 bg-slate-200 animate-pulse rounded w-80" />
-            <div className="h-6 bg-slate-200 animate-pulse rounded w-96" />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="h-40 bg-white animate-pulse rounded shadow border border-slate-200" />
-              ))}
-            </div>
+        <div className="flex-1 p-8 space-y-6">
+          <div className="h-10 rounded animate-pulse w-72" style={{ background: "#e5d5cb" }} />
+          <div className="grid grid-cols-4 gap-4">
+            {[...Array(7)].map((_, i) => (
+              <div key={i} className="h-32 rounded-xl animate-pulse" style={{ background: "#e5d5cb" }} />
+            ))}
           </div>
         </div>
       </div>
@@ -115,7 +107,6 @@ export default function Dashboard() {
     pendingTasks: notifications.filter((n) => !n.isRead).length,
   }
 
-  // --- Prepare simplified context for the chatbot ---
   const chatContext = {
     timetables: timetables.map((tt) => ({
       name: tt.name,
@@ -134,154 +125,229 @@ export default function Dashboard() {
     totalCourses: courses.length,
     totalFaculty: faculty.length,
   }
-  // ----------------------------------------------------
 
   const recentTimetables = timetables.slice(0, 3)
   const recentNotifications = notifications.slice(0, 3)
 
+  // Each card has its own color scheme: { bg, iconBg, iconColor, labelColor, valueColor }
   const statCards = [
     {
       title: "Total Courses",
       value: stats.totalCourses,
       icon: BookOpen,
-      color: "text-slate-800",
-      bgColor: "bg-slate-100",
-      iconBg: "bg-slate-100",
-      iconColor: "text-slate-600",
-      borderColor: "border-slate-200",
+      bg: "#dbeafe",
+      iconBg: "#bfdbfe",
+      iconStroke: "#1e40af",
+      labelColor: "#1e40af",
+      valueColor: "#1e3a8a",
     },
     {
       title: "Total Faculty",
       value: stats.totalFaculty,
       icon: Users,
-      color: "text-slate-800",
-      bgColor: "bg-slate-100",
-      iconBg: "bg-slate-100",
-      iconColor: "text-slate-600",
-      borderColor: "border-slate-200",
+      bg: "#dcfce7",
+      iconBg: "#bbf7d0",
+      iconStroke: "#166534",
+      labelColor: "#166534",
+      valueColor: "#14532d",
     },
     {
       title: "Total Rooms",
       value: stats.totalRooms,
       icon: Home,
-      color: "text-slate-800",
-      bgColor: "bg-slate-100",
-      iconBg: "bg-slate-100",
-      iconColor: "text-slate-600",
-      borderColor: "border-slate-200",
+      bg: "#ccfbf1",
+      iconBg: "#99f6e4",
+      iconStroke: "#115e59",
+      labelColor: "#115e59",
+      valueColor: "#134e4a",
     },
     {
       title: "Total Timetables",
       value: stats.totalTimetables,
       icon: Calendar,
-      color: "text-blue-900",
-      bgColor: "bg-blue-50",
-      iconBg: "bg-blue-50",
-      iconColor: "text-blue-700",
-      borderColor: "border-blue-100",
+      bg: "#ede9fe",
+      iconBg: "#ddd6fe",
+      iconStroke: "#5b21b6",
+      labelColor: "#5b21b6",
+      valueColor: "#4c1d95",
     },
     {
       title: "Active Conflicts",
       value: stats.activeConflicts,
       icon: AlertTriangle,
-      color: "text-red-700",
-      bgColor: "bg-red-50",
-      iconBg: "bg-red-50",
-      iconColor: "text-red-600",
-      borderColor: "border-red-100",
+      bg: "#ffe4e6",
+      iconBg: "#fecdd3",
+      iconStroke: "#9f1239",
+      labelColor: "#9f1239",
+      valueColor: "#881337",
     },
     {
-      title: "Completed Schedules",
+      title: "Completed",
       value: stats.completedSchedules,
       icon: CheckCircle,
-      color: "text-green-700",
-      bgColor: "bg-green-50",
-      iconBg: "bg-green-50",
-      iconColor: "text-green-600",
-      borderColor: "border-green-100",
+      bg: "#dcfce7",
+      iconBg: "#bbf7d0",
+      iconStroke: "#166534",
+      labelColor: "#166534",
+      valueColor: "#14532d",
     },
     {
       title: "Pending Tasks",
       value: stats.pendingTasks,
       icon: Bell,
-      color: "text-amber-700",
-      bgColor: "bg-amber-50",
-      iconBg: "bg-amber-50",
-      iconColor: "text-amber-600",
-      borderColor: "border-amber-100",
+      bg: "#fef3c7",
+      iconBg: "#fde68a",
+      iconStroke: "#92400e",
+      labelColor: "#92400e",
+      valueColor: "#78350f",
     },
   ]
 
   return (
-    <div className="flex min-h-screen bg-slate-50 relative overflow-hidden">
-      {/* Background elements removed for cleaner look */}
-      <div className="absolute inset-0 bg-slate-50"></div>
+    <div className="flex min-h-screen" style={{ background: "#f7f3f0" }}>
 
-      <div className="w-64 bg-slate-900 border-r border-slate-800 shadow-xl relative z-10">
-        <div className="p-6 space-y-8">
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div>
-                <h2 className="text-lg font-bold text-white tracking-wide">Smart Scheduler</h2>
-                <p className="text-xs text-slate-400">Academic Administration</p>
-              </div>
-            </div>
+      {/* ── SIDEBAR ── */}
+      <div
+        className="flex flex-col flex-shrink-0 transition-all duration-300 ease-in-out"
+        style={{
+          width: isSidebarCollapsed ? "60px" : "240px",
+          background: "#3d2c2c",
+          minHeight: "100vh",
+        }}
+      >
+        {/* Header */}
+        <div
+          className="flex items-center gap-3 px-3 py-4 flex-shrink-0"
+          style={{ borderBottom: "1px solid rgba(255,255,255,0.07)", minHeight: "58px" }}
+        >
+          <div
+            className="flex-shrink-0 flex items-center justify-center rounded-lg"
+            style={{ width: 30, height: 30, background: "#bf8b5e" }}
+          >
+            <span className="text-white font-medium text-sm">S</span>
           </div>
 
-          <nav className="space-y-2">
-            {navigationItems.map((item) => {
-              const IconComponent = item.icon
-              const isActive = activeNavItem === item.id
-              return (
-                <Link key={item.id} to={item.path} onClick={() => setActiveNavItem(item.id)}>
-                  <div
-                    className={`flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 group cursor-pointer ${
-                      isActive
-                        ? "bg-blue-900 text-white border-l-4 border-blue-500"
-                        : "text-slate-400 hover:bg-slate-800 hover:text-white"
-                    }`}
-                  >
-                    <IconComponent
-                      className={`w-5 h-5 transition-transform duration-200 ${isActive ? "text-blue-400" : "text-slate-400 group-hover:text-slate-200"}`}
-                    />
-                    <span className={`font-medium text-sm transition-colors duration-200 ${isActive ? "text-white" : ""}`}>
-                      {item.label}
-                    </span>
-                    {item.id === "notifications" && stats.pendingTasks > 0 && (
-                      <div className="ml-auto">
+          {!isSidebarCollapsed && (
+            <div className="flex-1 overflow-hidden">
+              <p className="text-sm font-medium truncate" style={{ color: "#f5ede8" }}>
+                Smart Scheduler
+              </p>
+              <p className="text-xs truncate" style={{ color: "rgba(245,237,232,0.45)" }}>
+                Academic Admin
+              </p>
+            </div>
+          )}
+
+          <button
+            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            className="flex-shrink-0 flex items-center justify-center rounded-md transition-colors"
+            style={{
+              width: 26,
+              height: 26,
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              marginLeft: isSidebarCollapsed ? "auto" : undefined,
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.08)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+          >
+            {isSidebarCollapsed ? (
+              <ChevronRight className="w-4 h-4" style={{ color: "rgba(245,237,232,0.5)" }} />
+            ) : (
+              <ChevronLeft className="w-4 h-4" style={{ color: "rgba(245,237,232,0.5)" }} />
+            )}
+          </button>
+        </div>
+
+        {/* Nav Items */}
+        <nav className="flex-1 px-2 py-3 space-y-1 overflow-y-auto overflow-x-hidden">
+          {navigationItems.map((item) => {
+            const IconComponent = item.icon
+            const isActive = activeNavItem === item.id
+            return (
+              <Link
+                key={item.id}
+                to={item.path}
+                onClick={() => setActiveNavItem(item.id)}
+                style={{ textDecoration: "none" }}
+              >
+                <div
+                  className="flex items-center gap-3 rounded-lg transition-all duration-150 cursor-pointer relative"
+                  style={{
+                    padding: isSidebarCollapsed ? "9px 0" : "9px 10px",
+                    justifyContent: isSidebarCollapsed ? "center" : undefined,
+                    background: isActive ? "#bf8b5e" : "transparent",
+                    marginBottom: "2px",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) e.currentTarget.style.background = "rgba(255,255,255,0.07)"
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) e.currentTarget.style.background = "transparent"
+                  }}
+                  title={isSidebarCollapsed ? item.label : undefined}
+                >
+                  <IconComponent
+                    className="flex-shrink-0"
+                    style={{
+                      width: 16,
+                      height: 16,
+                      color: isActive ? "#fff" : "rgba(245,237,232,0.55)",
+                    }}
+                  />
+                  {!isSidebarCollapsed && (
+                    <>
+                      <span
+                        className="text-sm truncate flex-1"
+                        style={{
+                          color: isActive ? "#fff" : "rgba(245,237,232,0.7)",
+                          fontWeight: isActive ? 500 : 400,
+                        }}
+                      >
+                        {item.label}
+                      </span>
+                      {item.id === "notifications" && stats.pendingTasks > 0 && (
                         <span
-                          className={`inline-flex items-center justify-center w-5 h-5 text-xs font-bold rounded-full ${
-                            isActive ? "bg-white/20 text-white" : "bg-red-600 text-white"
-                          }`}
+                          className="ml-auto text-white text-xs font-medium rounded-full flex-shrink-0"
+                          style={{
+                            background: "#c0392b",
+                            padding: "1px 6px",
+                            fontSize: "10px",
+                          }}
                         >
                           {stats.pendingTasks}
                         </span>
-                      </div>
-                    )}
-                  </div>
-                </Link>
-              )
-            })}
-          </nav>
-        </div>
-        <div className="absolute bottom-6 left-6 right-6"></div>
+                      )}
+                    </>
+                  )}
+                </div>
+              </Link>
+            )
+          })}
+        </nav>
       </div>
 
-      <div className="flex-1 overflow-auto relative z-10">
-        <div className="p-8 space-y-8">
+      {/* ── MAIN CONTENT ── */}
+      <div className="flex-1 overflow-auto">
+        <div className="p-6 space-y-6">
+
           {/* Header */}
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-bold text-slate-900 leading-tight">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div>
+              <h1 className="text-xl font-medium" style={{ color: "#2c1810" }}>
                 Dashboard
               </h1>
-              <p className="text-base text-slate-500 max-w-2xl leading-relaxed">
-                Welcome to your Smart Classroom Scheduler. Manage courses, faculty, and generate optimal timetables.
+              <p className="text-sm mt-1" style={{ color: "#7a5c50" }}>
+                Manage courses, faculty, and generate optimal timetables
               </p>
             </div>
             <div className="flex gap-3">
               <Link to="/timetables">
-                <Button className="bg-blue-900 hover:bg-blue-800 text-white shadow-sm transition-all duration-200 px-6 py-2 rounded-md">
+                <Button
+                  className="text-white text-sm px-5 py-2 rounded-lg"
+                  style={{ background: "#bf8b5e", border: "none" }}
+                >
                   <Calendar className="h-4 w-4 mr-2" />
                   View Timetables
                 </Button>
@@ -289,7 +355,8 @@ export default function Dashboard() {
               <Link to="/timetables/generate">
                 <Button
                   variant="outline"
-                  className="border-slate-300 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 shadow-sm transition-all duration-200 px-6 py-2 rounded-md"
+                  className="text-sm px-5 py-2 rounded-lg"
+                  style={{ borderColor: "#d9c4ba", color: "#6b3d2e", background: "#fff" }}
                 >
                   <Sparkles className="h-4 w-4 mr-2" />
                   Generate New
@@ -298,108 +365,131 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* ── STAT CARDS ── */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
             {statCards.map((stat, index) => {
               const IconComponent = stat.icon
               return (
-                <Card
+                <div
                   key={index}
-                  className={`bg-white border ${stat.borderColor} shadow-sm hover:shadow-md transition-all duration-200`}
+                  className="rounded-xl p-4 flex flex-col gap-2"
+                  style={{ background: stat.bg }}
                 >
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className={`p-3 rounded-md ${stat.iconBg} border border-slate-100`}>
-                        <IconComponent className={`h-5 w-5 ${stat.iconColor}`} />
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">{stat.title}</p>
-                        <p
-                          className={`text-2xl font-bold ${stat.color}`}
-                        >
-                          {stat.value}
-                        </p>
-                      </div>
-                    </div>
-                    <div className={`h-1 rounded-full ${stat.bgColor} w-full`} />
-                  </CardContent>
-                </Card>
+                  <div
+                    className="flex items-center justify-center rounded-lg"
+                    style={{ width: 32, height: 32, background: stat.iconBg }}
+                  >
+                    <IconComponent style={{ width: 15, height: 15, color: stat.iconStroke }} />
+                  </div>
+                  <p
+                    className="text-xs font-medium uppercase tracking-wide"
+                    style={{ color: stat.labelColor, letterSpacing: "0.04em" }}
+                  >
+                    {stat.title}
+                  </p>
+                  <p className="text-2xl font-medium" style={{ color: stat.valueColor }}>
+                    {stat.value}
+                  </p>
+                </div>
               )
             })}
           </div>
 
-          {/* Content Grid */}
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+          {/* ── CONTENT GRID ── */}
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+            {/* Recent Timetables */}
             <div className="xl:col-span-2">
-              <Card className="bg-white border border-slate-200 shadow-sm">
-                <CardHeader className="border-b border-slate-100 p-6 bg-slate-50/50">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-1">
-                      <CardTitle className="text-lg font-bold text-slate-800">Recent Timetables</CardTitle>
-                      <CardDescription className="text-slate-500 text-sm">
-                        Latest generated schedules and their status
-                      </CardDescription>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border-slate-300 bg-white hover:bg-slate-50 text-slate-600 transition-all duration-200 text-xs"
-                    >
-                      <Link to="/timetables">View All</Link>
-                    </Button>
+              <Card style={{ background: "#fff", border: "0.5px solid #e5d5cb", borderRadius: "10px" }}>
+                <CardHeader
+                  className="flex flex-row items-center justify-between p-4"
+                  style={{ borderBottom: "1px solid #f5ede8", background: "#fdfaf8" }}
+                >
+                  <div>
+                    <CardTitle className="text-sm font-medium" style={{ color: "#2c1810" }}>
+                      Recent Timetables
+                    </CardTitle>
+                    <CardDescription className="text-xs mt-0.5" style={{ color: "#7a5c50" }}>
+                      Latest generated schedules and their status
+                    </CardDescription>
                   </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs rounded-md"
+                    style={{ borderColor: "#d9c4ba", color: "#bf8b5e", background: "#fff" }}
+                  >
+                    <Link to="/timetables">View All</Link>
+                  </Button>
                 </CardHeader>
-                <CardContent className="p-6">
+
+                <CardContent className="p-4">
                   {recentTimetables.length === 0 ? (
-                    <div className="text-center py-16">
-                      <div className="bg-slate-100 rounded-full p-6 w-20 h-20 mx-auto mb-4 flex items-center justify-center border border-slate-200">
-                        <Calendar className="h-8 w-8 text-slate-400" />
+                    <div className="text-center py-12">
+                      <div
+                        className="rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center"
+                        style={{ background: "#f5ede8" }}
+                      >
+                        <Calendar className="h-7 w-7" style={{ color: "#bf8b5e" }} />
                       </div>
-                      <h3 className="text-lg font-semibold mb-2 text-slate-800">No Timetables Yet</h3>
-                      <p className="text-slate-500 mb-6 max-w-md mx-auto text-sm">
-                        Create your first timetable to get started with scheduling your classes and resources.
+                      <h3 className="text-sm font-medium mb-2" style={{ color: "#2c1810" }}>
+                        No Timetables Yet
+                      </h3>
+                      <p className="text-xs mb-5" style={{ color: "#7a5c50" }}>
+                        Create your first timetable to get started.
                       </p>
                       <Link to="/timetables/generate">
-                        <Button className="bg-blue-900 hover:bg-blue-800 text-white shadow-sm transition-all duration-200">
+                        <Button
+                          className="text-white text-sm rounded-lg"
+                          style={{ background: "#bf8b5e", border: "none" }}
+                        >
                           <Plus className="h-4 w-4 mr-2" />
                           Generate Timetable
                         </Button>
                       </Link>
                     </div>
                   ) : (
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       {recentTimetables.map((t) => (
                         <div
                           key={t._id}
-                          className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-lg hover:border-blue-300 transition-all duration-200"
+                          className="flex items-center justify-between p-3 rounded-lg"
+                          style={{ border: "0.5px solid #eeddd6", background: "#fdfaf8" }}
                         >
-                          <div className="flex-1 space-y-1">
-                            <div className="flex items-center gap-3">
-                              <h4 className="font-semibold text-slate-800 text-base">{t.name}</h4>
+                          <div className="flex-1 space-y-0.5">
+                            <div className="flex items-center gap-2">
+                              <h4 className="text-sm font-medium" style={{ color: "#2c1810" }}>
+                                {t.name}
+                              </h4>
                               <Badge
-                                variant={t.status === "published" ? "default" : "secondary"}
-                                className={
+                                className="text-xs px-2 py-0 rounded-full border-0"
+                                style={
                                   t.status === "published"
-                                    ? "bg-green-100 text-green-700 border-green-200"
-                                    : "bg-slate-100 text-slate-600 border-slate-200"
+                                    ? { background: "#dcfce7", color: "#14532d" }
+                                    : { background: "#fef3c7", color: "#78350f" }
                                 }
                               >
                                 {t.status}
                               </Badge>
                               {t.conflicts?.length > 0 && (
-                                <Badge variant="destructive" className="bg-red-100 text-red-700 border-red-200">
+                                <Badge
+                                  className="text-xs px-2 py-0 rounded-full border-0"
+                                  style={{ background: "#ffe4e6", color: "#881337" }}
+                                >
                                   {t.conflicts.length} conflicts
                                 </Badge>
                               )}
                             </div>
-                            <p className="text-sm text-slate-500">
-                              {t.department} • Semester {t.semester} • {t.schedule?.length || 0} classes scheduled
+                            <p className="text-xs" style={{ color: "#7a5c50" }}>
+                              {t.department} • Semester {t.semester} • {t.schedule?.length || 0} classes
                             </p>
                           </div>
-                          <Link to={`/timetables/`}>
+                          <Link to="/timetables/">
                             <Button
                               variant="outline"
                               size="sm"
-                              className="border-slate-300 bg-white hover:bg-slate-50 text-slate-600 transition-all duration-200 text-xs"
+                              className="text-xs rounded-md"
+                              style={{ borderColor: "#d9c4ba", color: "#bf8b5e", background: "#fff" }}
                             >
                               View Details
                             </Button>
@@ -412,105 +502,149 @@ export default function Dashboard() {
               </Card>
             </div>
 
-            {/* Sidebar */}
-            <div className="space-y-8">
-              <Card className="bg-white border border-slate-200 shadow-sm">
-                <CardHeader className="border-b border-slate-100 p-6 bg-slate-50/50">
-                  <CardTitle className="text-lg font-bold text-slate-800">Quick Actions</CardTitle>
-                  <CardDescription className="text-slate-500 text-sm">Frequently used operations</CardDescription>
+            {/* Sidebar cards */}
+            <div className="space-y-6">
+
+              {/* Quick Actions */}
+              <Card style={{ background: "#fff", border: "0.5px solid #e5d5cb", borderRadius: "10px" }}>
+                <CardHeader
+                  className="p-4"
+                  style={{ borderBottom: "1px solid #f5ede8", background: "#fdfaf8" }}
+                >
+                  <CardTitle className="text-sm font-medium" style={{ color: "#2c1810" }}>
+                    Quick Actions
+                  </CardTitle>
+                  <CardDescription className="text-xs" style={{ color: "#7a5c50" }}>
+                    Frequently used operations
+                  </CardDescription>
                 </CardHeader>
-                <CardContent className="p-6 space-y-3 flex flex-col">
-                  <Link to="/courses">
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start bg-white hover:bg-slate-50 border-slate-300 text-slate-700 transition-all duration-200 h-10"
-                    >
-                      <Plus className="h-4 w-4 mr-3 text-slate-400" />
-                      Add Course
-                    </Button>
-                  </Link>
-                  <Link to="/faculty">
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start bg-white hover:bg-slate-50 border-slate-300 text-slate-700 transition-all duration-200 h-10"
-                    >
-                      <Plus className="h-4 w-4 mr-3 text-slate-400" />
-                      Add Faculty
-                    </Button>
-                  </Link>
-                  <Link to="/rooms">
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start bg-white hover:bg-slate-50 border-slate-300 text-slate-700 transition-all duration-200 h-10"
-                    >
-                      <Plus className="h-4 w-4 mr-3 text-slate-400" />
-                      Add Room
-                    </Button>
-                  </Link>
+                <CardContent className="p-4 space-y-2">
+                  {[
+                    { to: "/courses", label: "Add Course", dot: "#1e40af" },
+                    { to: "/faculty", label: "Add Faculty", dot: "#166534" },
+                    { to: "/rooms", label: "Add Room", dot: "#115e59" },
+                  ].map(({ to, label, dot }) => (
+                    <Link key={to} to={to}>
+                      <button
+                        className="w-full flex items-center gap-3 rounded-lg text-sm transition-colors"
+                        style={{
+                          padding: "9px 12px",
+                          background: "#fdfaf8",
+                          border: "0.5px solid #eeddd6",
+                          color: "#2c1810",
+                          cursor: "pointer",
+                          textAlign: "left",
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = "#f5ede8")}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = "#fdfaf8")}
+                      >
+                        <span
+                          className="rounded-full flex-shrink-0"
+                          style={{ width: 7, height: 7, background: dot, display: "inline-block" }}
+                        />
+                        {label}
+                      </button>
+                    </Link>
+                  ))}
                   <Link to="/timetables/generate">
-                    <Button className="w-full justify-start bg-blue-900 hover:bg-blue-800 text-white shadow-sm transition-all duration-200 h-10">
-                      <Sparkles className="h-4 w-4 mr-3" />
+                    <button
+                      className="w-full flex items-center gap-3 rounded-lg text-sm text-white"
+                      style={{
+                        padding: "9px 12px",
+                        background: "#bf8b5e",
+                        border: "none",
+                        cursor: "pointer",
+                        textAlign: "left",
+                        fontWeight: 500,
+                      }}
+                    >
+                      <Sparkles className="h-4 w-4" />
                       Generate Timetable
-                    </Button>
+                    </button>
                   </Link>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border border-slate-200 shadow-sm">
-                <CardHeader className="border-b border-slate-100 p-6 bg-slate-50/50">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-1">
-                      <CardTitle className="text-lg font-bold text-slate-800">Notifications</CardTitle>
-                      <CardDescription className="text-slate-500 text-sm">Recent system alerts</CardDescription>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border-slate-300 bg-white hover:bg-slate-50 text-slate-600 transition-all duration-200 text-xs"
-                    >
-                      <Link to="/notifications">View All</Link>
-                    </Button>
+              {/* Notifications */}
+              <Card style={{ background: "#fff", border: "0.5px solid #e5d5cb", borderRadius: "10px" }}>
+                <CardHeader
+                  className="flex flex-row items-center justify-between p-4"
+                  style={{ borderBottom: "1px solid #f5ede8", background: "#fdfaf8" }}
+                >
+                  <div>
+                    <CardTitle className="text-sm font-medium" style={{ color: "#2c1810" }}>
+                      Notifications
+                    </CardTitle>
+                    <CardDescription className="text-xs" style={{ color: "#7a5c50" }}>
+                      Recent system alerts
+                    </CardDescription>
                   </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs rounded-md"
+                    style={{ borderColor: "#d9c4ba", color: "#bf8b5e", background: "#fff" }}
+                  >
+                    <Link to="/notifications">View All</Link>
+                  </Button>
                 </CardHeader>
-                <CardContent className="p-6">
+                <CardContent className="p-4">
                   {recentNotifications.length === 0 ? (
-                    <div className="text-center py-8">
-                      <p className="text-sm text-slate-500">No notifications yet</p>
-                    </div>
+                    <p className="text-center text-xs py-6" style={{ color: "#7a5c50" }}>
+                      No notifications yet
+                    </p>
                   ) : (
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       {recentNotifications.map((n) => (
                         <div
                           key={n._id}
-                          className="flex items-start gap-3 p-3 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-all duration-200"
+                          className="flex items-start gap-3 p-3 rounded-md"
+                          style={{ border: "0.5px solid #eeddd6", background: "#fdfaf8" }}
                         >
                           <div
-                            className={`p-1.5 rounded-md flex-shrink-0 ${
-                              n.type === "error"
-                                ? "bg-red-50 text-red-600"
-                                : n.type === "warning"
-                                  ? "bg-amber-50 text-amber-600"
+                            className="rounded-md flex-shrink-0 flex items-center justify-center"
+                            style={{
+                              width: 26,
+                              height: 26,
+                              background:
+                                n.type === "error"
+                                  ? "#ffe4e6"
+                                  : n.type === "warning"
+                                  ? "#fef3c7"
                                   : n.type === "success"
-                                    ? "bg-green-50 text-green-600"
-                                    : "bg-blue-50 text-blue-600"
-                            }`}
+                                  ? "#dcfce7"
+                                  : "#dbeafe",
+                            }}
                           >
                             {["error", "warning"].includes(n.type) ? (
                               <AlertTriangle
                                 className="h-3.5 w-3.5"
+                                style={{
+                                  color: n.type === "error" ? "#9f1239" : "#92400e",
+                                }}
                               />
                             ) : (
                               <TrendingUp
                                 className="h-3.5 w-3.5"
+                                style={{
+                                  color: n.type === "success" ? "#166534" : "#1e40af",
+                                }}
                               />
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-slate-800 mb-0.5">{n.title}</p>
-                            <p className="text-xs text-slate-500 leading-relaxed">{n.message}</p>
+                            <p className="text-xs font-medium mb-0.5" style={{ color: "#2c1810" }}>
+                              {n.title}
+                            </p>
+                            <p className="text-xs leading-relaxed" style={{ color: "#7a5c50" }}>
+                              {n.message}
+                            </p>
                           </div>
                           {!n.isRead && (
-                            <div className="w-1.5 h-1.5 bg-blue-600 rounded-full flex-shrink-0 mt-1.5" />
+                            <div
+                              className="rounded-full flex-shrink-0 mt-1"
+                              style={{ width: 6, height: 6, background: "#1e40af" }}
+                            />
                           )}
                         </div>
                       ))}
@@ -523,13 +657,21 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* ── CHAT FAB ── */}
       <div className="fixed bottom-8 right-8 z-40">
-        <Button
+        <button
           onClick={() => setIsChatOpen(true)}
-          className="w-14 h-14 rounded-full bg-blue-900 text-white shadow-lg hover:bg-blue-800 hover:scale-105 transition-all duration-200"
+          className="flex items-center justify-center rounded-full transition-transform hover:scale-105"
+          style={{
+            width: 48,
+            height: 48,
+            background: "#bf8b5e",
+            border: "none",
+            cursor: "pointer",
+          }}
         >
-          <MessageSquare className="h-6 w-6" />
-        </Button>
+          <MessageSquare className="h-5 w-5 text-white" />
+        </button>
       </div>
 
       <Chatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} context={chatContext} />
