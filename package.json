@@ -7,6 +7,8 @@
   "description": "This folder contains the **frontend** of the AI-Driven Smart Classroom project.   The frontend is responsible for the user interface and client-side interactions.",
   "main": "index.js",
   "dependencies": {
+    "express": "^4.19.2",
+    "axios": "^1.6.0",
     "ansi-regex": "^5.0.1",
     "ansi-styles": "^4.3.0",
     "chalk": "^4.1.2",

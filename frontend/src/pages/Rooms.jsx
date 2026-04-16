@@ -66,7 +66,7 @@ export default function RoomPage() {
   const fetchRooms = async () => {
     setLoading(true)
     try {
-      const res = await axios.get("http://localhost:5001/api/rooms")
+      const res = await axios.get("/api/rooms")
       setRooms(res.data)
     } catch (error) { console.error("Error fetching rooms:", error) }
     finally { setLoading(false) }
@@ -96,9 +96,9 @@ export default function RoomPage() {
         equipment: formData.equipment ? formData.equipment.split(",").map((e) => e.trim()).filter(Boolean) : [],
       }
       if (editingRoom) {
-        await axios.put(`http://localhost:5001/api/rooms/${editingRoom._id}`, payload)
+        await axios.put(`/api/rooms/${editingRoom._id}`, payload)
       } else {
-        await axios.post("http://localhost:5001/api/rooms", payload)
+        await axios.post("/api/rooms", payload)
       }
       resetForm(); setShowForm(false); fetchRooms()
     } catch (error) { console.error("Error saving room:", error) }
@@ -108,7 +108,7 @@ export default function RoomPage() {
   const handleDeleteRoom = async (id) => {
     if (!confirm("Are you sure you want to delete this room?")) return
     try {
-      await axios.delete(`http://localhost:5001/api/rooms/${id}`)
+      await axios.delete(`/api/rooms/${id}`)
       fetchRooms()
     } catch (error) { console.error("Error deleting room:", error) }
   }
@@ -188,20 +188,23 @@ export default function RoomPage() {
     {
       key: "equipment",
       label: "Equipment",
-      render: (room) => (
-        <div className="flex flex-wrap gap-1 max-w-36">
-          {room.equipment?.slice(0, 2).map((eq, i) => (
-            <span key={i} className="px-2 py-0.5 rounded text-xs" style={{ background: "#ccfbf1", color: "#134e4a", border: "0.5px solid #99f6e4" }}>
-              {eq}
-            </span>
-          ))}
-          {room.equipment?.length > 2 && (
-            <span className="px-2 py-0.5 rounded text-xs" style={{ background: "#f5ede8", color: "#7a5c50" }}>
-              +{room.equipment.length - 2}
-            </span>
-          )}
-        </div>
-      ),
+      render: (room) => {
+        const equip = Array.isArray(room.equipment) ? room.equipment : []
+        return (
+          <div className="flex flex-wrap gap-1 max-w-36">
+            {equip.slice(0, 2).map((eq, i) => (
+              <span key={i} className="px-2 py-0.5 rounded text-xs" style={{ background: "#ccfbf1", color: "#134e4a", border: "0.5px solid #99f6e4" }}>
+                {eq}
+              </span>
+            ))}
+            {equip.length > 2 && (
+              <span className="px-2 py-0.5 rounded text-xs" style={{ background: "#f5ede8", color: "#7a5c50" }}>
+                +{equip.length - 2}
+              </span>
+            )}
+          </div>
+        )
+      },
     },
     {
       key: "actions",

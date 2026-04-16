@@ -9,6 +9,7 @@ import roomsRouter from "./routes/roomsRoute.js";
 import timetablesRouter from "./routes/timetableRoute.js";
 import aiRouter from "./routes/aiRoute.js";
 import notificationsRouter from "./routes/notificationsRoute.js";
+import weatherRouter from "./routes/weatherRoute.js";
 
 dotenv.config({ quiet: true });
 
@@ -27,10 +28,15 @@ app.use("/api/rooms", roomsRouter);
 app.use("/api/timetables", timetablesRouter);
 app.use("/api/ai", aiRouter);
 app.use("/api/notifications", notificationsRouter);
+app.use("/api/weather-check", weatherRouter);
 
-// Server start
-const PORT = process.env.PORT || 5001;
+// Export app for Vercel serverless
+export default app;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Only start the HTTP server when running locally (not on Vercel)
+if (process.env.VERCEL !== "1") {
+  const PORT = process.env.PORT || 5001;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}

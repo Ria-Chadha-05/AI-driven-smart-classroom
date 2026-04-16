@@ -12,7 +12,7 @@ import {
 } from "lucide-react"
 
 const api = axios.create({
-  baseURL: "http://localhost:5001/api",
+  baseURL: "/api",
   headers: { "Content-Type": "application/json" },
 })
 

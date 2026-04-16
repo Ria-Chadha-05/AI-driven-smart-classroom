@@ -48,11 +48,11 @@ export default function Dashboard() {
     const fetchData = async () => {
       try {
         const [coursesRes, facultyRes, roomsRes, timetablesRes, notificationsRes] = await Promise.all([
-          axios.get("http://localhost:5001/api/courses"),
-          axios.get("http://localhost:5001/api/faculty"),
-          axios.get("http://localhost:5001/api/rooms"),
-          axios.get("http://localhost:5001/api/timetables"),
-          axios.get("http://localhost:5001/api/notifications"),
+          axios.get("/api/courses"),
+          axios.get("/api/faculty"),
+          axios.get("/api/rooms"),
+          axios.get("/api/timetables"),
+          axios.get("/api/notifications"),
         ])
         setCourses(Array.isArray(coursesRes.data) ? coursesRes.data : [])
         setFaculty(Array.isArray(facultyRes.data) ? facultyRes.data : [])

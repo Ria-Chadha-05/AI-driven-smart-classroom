@@ -38,7 +38,7 @@ export function Chatbot({ isOpen, onClose, context }) {
 
     try {
       // API call to your backend AI chat route
-      const res = await axios.post("http://localhost:5000/api/ai/chat", {
+      const res = await axios.post("/api/ai/chat", {
         message: currentInput,
         context: context, // Pass the dashboard context to the AI
       });
