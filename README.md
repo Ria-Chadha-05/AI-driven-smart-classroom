@@ -375,12 +375,6 @@ Please ensure your code follows the existing structure and doesn't break existin
 
 ---
 
-## 📜 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
-
 ## 👩‍💻 Author
 
 **Ria Chadha**
