@@ -21,6 +21,10 @@ app.use(cors());
 // Connect to database
 dbConnect();
 
+router.get("/", (req, res) => {
+  res.send("AI Route Working");
+});
+
 // API routes
 app.use("/api/courses", coursesRouter);
 app.use("/api/faculty", facultyRouter);
