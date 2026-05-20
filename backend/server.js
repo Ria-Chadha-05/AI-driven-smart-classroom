@@ -16,12 +16,15 @@ dotenv.config({ quiet: true });
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "*",
+  credentials: true,
+}));
 
 // Connect to database
 dbConnect();
 
-router.get("/", (req, res) => {
+app.get("/", (req, res) => {
   res.send("AI Route Working");
 });
 

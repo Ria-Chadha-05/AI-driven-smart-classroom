@@ -41,7 +41,7 @@ It combines a clean React dashboard with a Groq-powered LLM backend (LLaMA 3.3 7
 - Guarantees **zero conflicts** across faculty, rooms, and time slots
 - Respects institutional constraints: break periods, session frequencies, room types
 
-### 🌦️ Weather-Based Class Cancellation *(New Feature)*
+### 🌦️ Weather-Based Class Cancellation 
 > **Automatically cancels classes and notifies everyone when the weather turns bad.**
 
 IntelliSched integrates with the **OpenWeatherMap API** to run a daily automated weather check at **7:00 AM IST** via a Vercel Cron job. If the system detects rain, thunderstorms, or drizzle in the configured city, it:

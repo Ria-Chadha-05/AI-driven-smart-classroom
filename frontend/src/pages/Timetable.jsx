@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import axios from "axios"
+import api from "@/lib/api"
 import { Link } from "react-router-dom"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -11,10 +11,7 @@ import {
   Eye, CheckCircle2, ChevronLeft, ChevronRight, X,
 } from "lucide-react"
 
-const api = axios.create({
-  baseURL: "/api",
-  headers: { "Content-Type": "application/json" },
-})
+
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 const TIME_SLOTS = [
@@ -188,7 +185,7 @@ export default function TimetablePage() {
   async function fetchTimetables() {
     setLoadingList(true)
     try {
-      const res = await api.get("/timetables")
+      const res = await api.get("/api/timetables")
       setTimetables(Array.isArray(res.data) ? res.data : [])
     } catch { setError("Failed to load records from database.") }
     finally { setLoadingList(false) }
@@ -196,7 +193,7 @@ export default function TimetablePage() {
 
   async function fetchSupportingData() {
     try {
-      const [c, f, r] = await Promise.all([api.get("/courses"), api.get("/faculty"), api.get("/rooms")])
+      const [c, f, r] = await Promise.all([api.get("/api/courses"), api.get("/api/faculty"), api.get("/api/rooms")])
       setCourses(c.data); setFaculty(f.data); setRooms(r.data)
     } catch (err) { console.error(err) }
   }
@@ -204,7 +201,7 @@ export default function TimetablePage() {
   async function viewTimetable(id) {
     setLoadingDetail(true)
     try {
-      const res = await api.get(`/timetables/${id}`)
+      const res = await api.get(`/api/timetables/${id}`)
       setSelected(res.data)
     } catch { setError("Error fetching timetable details.") }
     finally { setLoadingDetail(false) }
@@ -216,7 +213,7 @@ export default function TimetablePage() {
     setError(null)
     try {
       const payload = { ...form, semester: Number(form.semester), academicYear: Number(form.academicYear) }
-      const res = await api.post("/timetables/generate", payload)
+      const res = await api.post("/api/timetables/generate", payload)
       await fetchTimetables()
       await viewTimetable(res.data._id)
     } catch { setError("Generation failed. Check constraints and try again.") }
@@ -226,7 +223,7 @@ export default function TimetablePage() {
   async function togglePublish(t) {
     try {
       const status = t.status === "published" ? "draft" : "published"
-      await api.put(`/timetables/${t._id}`, { ...t, status })
+      await api.put(`/api/timetables/${t._id}`, { ...t, status })
       fetchTimetables()
       if (selected?._id === t._id) viewTimetable(t._id)
     } catch (err) { console.error(err) }
@@ -235,7 +232,7 @@ export default function TimetablePage() {
   async function deleteTimetable(t) {
     if (!confirm("Delete this timetable permanently?")) return
     try {
-      await api.delete(`/timetables/${t._id}`)
+      await api.delete(`/api/timetables/${t._id}`)
       fetchTimetables()
       if (selected?._id === t._id) setSelected(null)
     } catch (err) { console.error(err) }

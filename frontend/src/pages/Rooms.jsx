@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import axios from "axios"
+import api from "@/lib/api"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -66,7 +66,7 @@ export default function RoomPage() {
   const fetchRooms = async () => {
     setLoading(true)
     try {
-      const res = await axios.get("/api/rooms")
+      const res = await api.get("/api/rooms")
       setRooms(res.data)
     } catch (error) { console.error("Error fetching rooms:", error) }
     finally { setLoading(false) }
@@ -96,9 +96,9 @@ export default function RoomPage() {
         equipment: formData.equipment ? formData.equipment.split(",").map((e) => e.trim()).filter(Boolean) : [],
       }
       if (editingRoom) {
-        await axios.put(`/api/rooms/${editingRoom._id}`, payload)
+        await api.put(`/api/rooms/${editingRoom._id}`, payload)
       } else {
-        await axios.post("/api/rooms", payload)
+        await api.post("/api/rooms", payload)
       }
       resetForm(); setShowForm(false); fetchRooms()
     } catch (error) { console.error("Error saving room:", error) }
@@ -108,7 +108,7 @@ export default function RoomPage() {
   const handleDeleteRoom = async (id) => {
     if (!confirm("Are you sure you want to delete this room?")) return
     try {
-      await axios.delete(`/api/rooms/${id}`)
+      await api.delete(`/api/rooms/${id}`)
       fetchRooms()
     } catch (error) { console.error("Error deleting room:", error) }
   }

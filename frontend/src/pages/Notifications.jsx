@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import axios from "axios"
+import api from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -12,10 +12,7 @@ import {
 } from "lucide-react"
 import { Link } from "react-router-dom"
 
-const api = axios.create({
-  baseURL: "/api",
-  headers: { "Content-Type": "application/json" },
-})
+
 
 // Per-type config
 const TYPE_CONFIG = {
@@ -57,7 +54,7 @@ export default function NotificationsPage() {
   const fetchNotifications = async () => {
     setLoading(true)
     try {
-      const res = await api.get("/notifications")
+      const res = await api.get("/api/notifications")
       setNotifications(
         Array.isArray(res.data)
           ? res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -76,7 +73,7 @@ export default function NotificationsPage() {
     e.preventDefault()
     setFormLoading(true)
     try {
-      await api.post("/notifications", formData)
+      await api.post("/api/notifications", formData)
       resetForm(); setShowForm(false); fetchNotifications()
     } catch (error) { console.error(error) }
     finally { setFormLoading(false) }
@@ -85,7 +82,7 @@ export default function NotificationsPage() {
   const confirmDeleteNotification = async () => {
     if (!notificationToDelete) return
     try {
-      await api.delete(`/notifications/${notificationToDelete._id}`)
+      await api.delete(`/api/notifications/${notificationToDelete._id}`)
       setNotifications((prev) => prev.filter((n) => n._id !== notificationToDelete._id))
     } catch (error) { console.error(error) }
     finally { setNotificationToDelete(null) }
@@ -93,7 +90,7 @@ export default function NotificationsPage() {
 
   const handleMarkAsRead = async (id) => {
     try {
-      await api.put(`/notifications/${id}/read`)
+      await api.put(`/api/notifications/${id}/read`)
       setJustRead((prev) => new Set([...prev, id]))
       setTimeout(() => {
         setNotifications((prev) => prev.map((n) => (n._id === id ? { ...n, isRead: true } : n)))
@@ -105,7 +102,7 @@ export default function NotificationsPage() {
   const handleMarkAllRead = async () => {
     const unreadIds = notifications.filter((n) => !n.isRead).map((n) => n._id)
     try {
-      await Promise.all(unreadIds.map((id) => api.put(`/notifications/${id}/read`)))
+      await Promise.all(unreadIds.map((id) => api.put(`/api/notifications/${id}/read`)))
       fetchNotifications()
     } catch (error) { console.error(error) }
   }

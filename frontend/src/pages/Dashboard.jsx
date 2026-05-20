@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import axios from "axios"
+import api from "@/lib/api"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -48,11 +48,11 @@ export default function Dashboard() {
     const fetchData = async () => {
       try {
         const [coursesRes, facultyRes, roomsRes, timetablesRes, notificationsRes] = await Promise.all([
-          axios.get("/api/courses"),
-          axios.get("/api/faculty"),
-          axios.get("/api/rooms"),
-          axios.get("/api/timetables"),
-          axios.get("/api/notifications"),
+          api.get("/api/courses"),
+          api.get("/api/faculty"),
+          api.get("/api/rooms"),
+          api.get("/api/timetables"),
+          api.get("/api/notifications"),
         ])
         setCourses(Array.isArray(coursesRes.data) ? coursesRes.data : [])
         setFaculty(Array.isArray(facultyRes.data) ? facultyRes.data : [])

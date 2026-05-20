@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import axios from "axios"
+import api from "@/lib/api"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -40,7 +40,7 @@ export default function FacultyPage() {
   const fetchFaculty = async () => {
     setLoading(true)
     try {
-      const res = await axios.get("/api/faculty")
+      const res = await api.get("/api/faculty")
       setFaculty(Array.isArray(res.data) ? res.data : [])
     } catch (error) {
       console.error(error)
@@ -56,9 +56,9 @@ export default function FacultyPage() {
     setFormLoading(true)
     try {
       if (editingFaculty) {
-        await axios.put(`/api/faculty/${editingFaculty._id}`, data)
+        await api.put(`/api/faculty/${editingFaculty._id}`, data)
       } else {
-        await axios.post("/api/faculty", data)
+        await api.post("/api/faculty", data)
       }
       setShowForm(false)
       setEditingFaculty(null)
@@ -72,7 +72,7 @@ export default function FacultyPage() {
 
   const handleDelete = async (f) => {
     try {
-      await axios.delete(`/api/faculty/${f._id}`)
+      await api.delete(`/api/faculty/${f._id}`)
       if (editingFaculty && editingFaculty._id === f._id) {
         setEditingFaculty(null)
         setShowForm(false)

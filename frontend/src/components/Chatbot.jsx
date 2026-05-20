@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import api from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,7 +38,7 @@ export function Chatbot({ isOpen, onClose, context }) {
 
     try {
       // API call to your backend AI chat route
-      const res = await axios.post("/api/ai/chat", {
+      const res = await api.post("/api/ai/chat", {
         message: currentInput,
         context: context, // Pass the dashboard context to the AI
       });
