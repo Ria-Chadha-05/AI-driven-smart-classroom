@@ -16,10 +16,22 @@ dotenv.config({ quiet: true });
 const app = express();
 
 app.use(express.json());
-app.use(cors({
-  origin: process.env.FRONTEND_URL || "*",
-  credentials: true,
-}));
+
+const allowedOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(",").map((o) => o.trim())
+  : null;
+
+app.use(
+  cors({
+    origin: allowedOrigins
+      ? (origin, cb) => {
+          if (!origin || allowedOrigins.includes(origin)) cb(null, true);
+          else cb(new Error("Not allowed by CORS"));
+        }
+      : true,
+    credentials: true,
+  })
+);
 
 // Connect to database
 dbConnect();
