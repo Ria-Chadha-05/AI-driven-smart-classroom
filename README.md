@@ -33,6 +33,14 @@ It combines a clean React dashboard with a Groq-powered LLM backend (LLaMA 3.3 7
 
 ---
 
+## 🏗️ System Architecture
+
+<div align="center">
+  <img src="intellisched_architecture.svg" alt="IntelliSched System Architecture" width="720"/>
+</div>
+
+---
+
 ## ✨ Features
 
 ### 🤖 AI-Powered Timetable Generation
